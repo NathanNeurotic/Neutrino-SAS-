@@ -118,8 +118,8 @@ run_nhddl: all copy copy_extra
 	mkdir -p temp
 	sudo mount $(UDPBD_BD) temp
 	sudo cp    README.md              temp
-	sudo cp -R ee/loader/config       temp
-	sudo cp -R ee/loader/modules      temp
+	sudo cp    ee/loader/config/*.toml temp
+	sudo cp    ee/loader/modules/*     temp
 	sudo cp    ee/loader/neutrino.elf temp
 	sudo cp    ee/loader/version.txt  temp
 	sudo umount $(UDPBD_BD)
@@ -138,8 +138,8 @@ RELEASE_DIR = ./releases/neutrino_$(shell git describe --tags --exclude=latest)
 release: all copy
 	mkdir -p                     $(RELEASE_DIR)
 	cp    README.md              $(RELEASE_DIR)
-	cp -R ee/loader/config       $(RELEASE_DIR)
-	cp -R ee/loader/modules      $(RELEASE_DIR)
+	cp    ee/loader/config/*.toml $(RELEASE_DIR)
+	cp    ee/loader/modules/*     $(RELEASE_DIR)
 	cp    ee/loader/neutrino.elf $(RELEASE_DIR)
 	cp    ee/loader/version.txt  $(RELEASE_DIR)
 	7z a -t7z $(RELEASE_DIR).7z $(RELEASE_DIR)/*
