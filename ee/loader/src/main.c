@@ -229,6 +229,7 @@ struct SModule mod_ee_core;
 int module_load(struct SModule *mod)
 {
     char sFilePath[MAX_FILENAME];
+    int fd;
 
     //printf("%s(%s)\n", __FUNCTION__, mod->sFileName);
 
@@ -241,12 +242,16 @@ int module_load(struct SModule *mod)
         return -1;
     }
 
-    // Open module on default location
-    snprintf(sFilePath, MAX_FILENAME, "modules/%s", mod->sFileName);
-    int fd = open(sFilePath, O_RDONLY);
+    // Open module in flat layout first, then legacy modules/ layout
+    snprintf(sFilePath, MAX_FILENAME, "%s", mod->sFileName);
+    fd = open(sFilePath, O_RDONLY);
     if (fd < 0) {
-        printf("ERROR: Unable to open %s\n", mod->sFileName);
-        return -1;
+            snprintf(sFilePath, MAX_FILENAME, "modules/%s", mod->sFileName);
+        fd = open(sFilePath, O_RDONLY);
+        if (fd < 0) {
+            printf("ERROR: Unable to open %s\n", mod->sFileName);
+            return -1;
+        }
     }
 
     //printf("%s(%s) loaded %s\n", __FUNCTION__, mod->sFileName, sFilePath);
@@ -840,14 +845,28 @@ int load_config(toml_datum_t t)
 toml_result_t load_config_file_toml(const char * type, const char * subtype)
 {
     char filename[256];
+    char legacy_filename[256];
+    char flat_filename[256];
     toml_result_t res;
 
     // Open and parse file
-    if (subtype != NULL)
-        snprintf(filename, 256, "config/%s-%s.toml", type, subtype);
-    else
-        snprintf(filename, 256, "config/%s.toml", type);
+    if (subtype != NULL) {
+        snprintf(flat_filename, 256, "%s-%s.toml", type, subtype);
+    } else {
+        snprintf(flat_filename, 256, "%s.toml", type);
+    }
 
+    if (subtype != NULL)
+        snprintf(legacy_filename, 256, "config/%s-%s.toml", type, subtype);
+    else
+           snprintf(legacy_filename, 256, "config/%s.toml", type);
+
+    if (access(flat_filename, F_OK) != 0 && access(legacy_filename, F_OK) == 0) {
+        snprintf(filename, 256, "%s", legacy_filename);
+    } else {
+        snprintf(filename, 256, "%s", flat_filename);
+    }
+    
     res = toml_parse_file_ex(filename);
     if (!res.ok)
         printf("ERROR: failed to load and parse %s: %s\n", filename, res.errmsg);
