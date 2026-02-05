@@ -6,7 +6,7 @@ A neutrino is a particle with almost zero mass, and that's what this device emul
 
 Neutrino also does not have a user interface, instead it's meant to be integrated as a backend to a frontend (user interface). This makes neutrino much more easy to maintain, and allows many more applications to be made using neutrino as the backend.
 
-With neutrino all modules are... modular. They are in a separate folder called `modules`. This allows the user add new and improved modules. What modules are loaded is fully configurable using TOML config files in the `config` folder.
+With neutrino all modules are... modular. Place them alongside `neutrino.elf` so the loader can discover them in a flat layout. What modules are loaded is fully configurable using TOML config files stored next to `neutrino.elf`.
 
 ## Environments
 An environment in neutrino describes what IOP modules are loaded and defines what features the environment has. In neutrino there are 3 environments:
