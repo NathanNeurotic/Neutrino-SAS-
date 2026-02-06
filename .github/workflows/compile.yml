@@ -2,12 +2,17 @@ name: CI-compile
 
 on:
   push:
+    branches: [ master ]
   pull_request:
+
+permissions:
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     container: ps2max/dev:v20250725-2
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -18,19 +23,20 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           make clean all release
 
-      - name: Upload release as artifact
-        if: ${{ success() }}
+      - name: Verify release artifacts
+        run: ls -lh releases/*.7z
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          path: |
-            releases/*.7z
+          name: build
+          path: releases/*.7z
 
-      - name: Create latest release
-        if: github.ref == 'refs/heads/master'
+      - name: Create commit-based release
         uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          title: "Latest development build"
-          files: |
-            releases/*.7z
+          automatic_release_tag: "dev-${{ github.sha }}"
+          prerelease: true
+          title: "Dev build dev-${{ github.sha }}"
+          files: releases/*.7z
