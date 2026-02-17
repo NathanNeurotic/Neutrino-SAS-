@@ -242,11 +242,11 @@ int module_load(struct SModule *mod)
         return -1;
     }
 
-    // Open module in flat layout first, then legacy modules/ layout
-    snprintf(sFilePath, MAX_FILENAME, "%s", mod->sFileName);
+    // Open module in modules/ layout first, then fallback to flat layout
+    snprintf(sFilePath, MAX_FILENAME, "modules/%s", mod->sFileName);
     fd = open(sFilePath, O_RDONLY);
     if (fd < 0) {
-            snprintf(sFilePath, MAX_FILENAME, "modules/%s", mod->sFileName);
+        snprintf(sFilePath, MAX_FILENAME, "%s", mod->sFileName);
         fd = open(sFilePath, O_RDONLY);
         if (fd < 0) {
             printf("ERROR: Unable to open %s\n", mod->sFileName);

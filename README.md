@@ -6,7 +6,7 @@ A neutrino is a particle with almost zero mass, and that's what this device emul
 
 Neutrino also does not have a user interface, instead it's meant to be integrated as a backend to a frontend (user interface). This makes neutrino much more easy to maintain, and allows many more applications to be made using neutrino as the backend.
 
-With neutrino all modules are... modular. Place them alongside `neutrino.elf` so the loader can discover them in a flat layout. What modules are loaded is fully configurable using TOML config files stored next to `neutrino.elf`.
+With neutrino all modules are... modular. The loader first checks `modules/<file>` and falls back to a flat layout alongside `neutrino.elf` if needed. What modules are loaded is fully configurable using TOML config files stored next to `neutrino.elf`.
 
 ## Environments
 An environment in neutrino describes what IOP modules are loaded and defines what features the environment has. In neutrino there are 3 environments:
@@ -56,6 +56,12 @@ The following CD/DVD emulation drivers are supported:
 The following HDD emulation drivers are supported:
 - No: using ATA HDD in the PS2
 - File: using a virtual HDD image file from the backing store
+
+
+## Build targets
+- `make copy`: stage modules under `ee/loader/modules/` (legacy packaging).
+- `make release`: create the default versioned release package in subfolders: `neutrino.elf` at root plus `modules/` and `config/`.
+- `make sas`: create a flat SAS-ready release package in `releases/` with `neutrino.elf`, TOML configs, and modules at the package root (fallback layout).
 
 ## Usage instructions
 Neutrino is a command line application. To get the most out of neutrino you will need to run it from the command line, for instance using [ps2link](https://github.com/ps2dev/ps2link) and [ps2client](https://github.com/ps2dev/ps2client).
