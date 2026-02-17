@@ -134,12 +134,23 @@ sim: all copy copy_extra
 sim_mount:
 	losetup -Pf ee/loader/bd_exfat.raw
 
+
+SAS_DIR = ./releases/neutrino_sas_$(shell git describe --tags --exclude=latest)
+sas: all copy
+	mkdir -p                     $(SAS_DIR)
+	cp    README.md              $(SAS_DIR)
+	cp    ee/loader/config/*.toml $(SAS_DIR)
+	cp    ee/loader/modules/*     $(SAS_DIR)
+	cp    ee/loader/neutrino.elf $(SAS_DIR)
+	cp    ee/loader/version.txt  $(SAS_DIR)
+	7z a -t7z $(SAS_DIR).7z $(SAS_DIR)/*
+
 RELEASE_DIR = ./releases/neutrino_$(shell git describe --tags --exclude=latest)
 release: all copy
-	mkdir -p                     $(RELEASE_DIR)
-	cp    README.md              $(RELEASE_DIR)
-	cp    ee/loader/config/*.toml $(RELEASE_DIR)
-	cp    ee/loader/modules/*     $(RELEASE_DIR)
-	cp    ee/loader/neutrino.elf $(RELEASE_DIR)
-	cp    ee/loader/version.txt  $(RELEASE_DIR)
+	mkdir -p                       $(RELEASE_DIR)/modules $(RELEASE_DIR)/config
+	cp    README.md                $(RELEASE_DIR)
+	cp    ee/loader/config/*.toml  $(RELEASE_DIR)/config
+	cp    ee/loader/modules/*      $(RELEASE_DIR)/modules
+	cp    ee/loader/neutrino.elf   $(RELEASE_DIR)
+	cp    ee/loader/version.txt    $(RELEASE_DIR)
 	7z a -t7z $(RELEASE_DIR).7z $(RELEASE_DIR)/*
