@@ -861,7 +861,8 @@ toml_result_t load_config_file_toml(const char * type, const char * subtype)
     else
            snprintf(legacy_filename, 256, "config/%s.toml", type);
 
-    if (access(flat_filename, F_OK) != 0 && access(legacy_filename, F_OK) == 0) {
+    // Prefer legacy config/ layout, then fallback to flat layout
+    if (access(legacy_filename, F_OK) == 0) {
         snprintf(filename, 256, "%s", legacy_filename);
     } else {
         snprintf(filename, 256, "%s", flat_filename);
