@@ -57,12 +57,6 @@ The following HDD emulation drivers are supported:
 - No: using ATA HDD in the PS2
 - File: using a virtual HDD image file from the backing store
 
-
-## Build targets
-- `make copy`: stage modules under `ee/loader/modules/` (legacy packaging).
-- `make release`: create the default versioned release package in subfolders: `neutrino.elf` at root plus `modules/` and `config/`.
-- `make sas`: create a flat SAS-ready release package in `releases/` with `neutrino.elf`, TOML configs, and modules at the package root (fallback layout).
-
 ## Usage instructions
 Neutrino is a command line application. To get the most out of neutrino you will need to run it from the command line, for instance using [ps2link](https://github.com/ps2dev/ps2link) and [ps2client](https://github.com/ps2dev/ps2client).
 
