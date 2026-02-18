@@ -200,9 +200,9 @@ run: all
 	ps2client -h 192.168.1.10 execee host:$(EE_BIN_PACKED) $(ARGS)
 
 run_mmce_qb: all
-	ps2client -h 192.168.1.10 -t 1 execiop host:iomanX.irx
-	ps2client -h 192.168.1.10 -t 1 execiop host:fileXio.irx
-	ps2client -h 192.168.1.10 -t 1 execiop host:mmceman.irx
+	ps2client -h 192.168.1.10 -t 1 execiop host:modules/iomanX.irx
+	ps2client -h 192.168.1.10 -t 1 execiop host:modules/fileXio.irx
+	ps2client -h 192.168.1.10 -t 1 execiop host:modules/mmceman.irx
 	ps2client -h 192.168.1.10 execee host:$(EE_BIN_PACKED) $(ARGS) -qb
 
 sim: all
