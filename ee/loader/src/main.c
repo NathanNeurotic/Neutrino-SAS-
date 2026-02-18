@@ -855,13 +855,13 @@ toml_result_t load_config_file_toml(const char * type, const char * subtype)
     }
 
     if (subtype != NULL)
-        snprintf(legacy_filename, 256, "config/%s-%s.toml", type, subtype);
+        snprintf(filename, 256, "config/%s-%s.toml", type, subtype);
     else
-           snprintf(legacy_filename, 256, "config/%s.toml", type);
+           snprintf(filename, 256, "config/%s.toml", type);
 
     // Prefer legacy config/ layout, then fallback to flat layout
-    if (access(legacy_filename, F_OK) == 0) {
-        snprintf(filename, 256, "%s", legacy_filename);
+    if (access(filename, F_OK) == 0) {
+        snprintf(filename, 256, "%s", filename);
     } else {
         snprintf(filename, 256, "%s", flat_filename);
     }
