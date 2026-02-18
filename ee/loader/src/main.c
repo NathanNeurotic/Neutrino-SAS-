@@ -845,8 +845,6 @@ int load_config(toml_datum_t t)
 toml_result_t load_config_file_toml(const char * type, const char * subtype)
 {
     char filename[256];
-    char legacy_filename[256];
-    char flat_filename[256];
     toml_result_t res;
 
     // Open and parse file
